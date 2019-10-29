@@ -108,7 +108,7 @@ typedef struct inode_s
 #define N_INODES_PER_BLOCK ((int)(DATA_BLOCK_SIZE/sizeof(INODE)))
 
 // Total number of inodes in the file system
-#define N_INODES (N_INODES_PER_BLOCK * N_INODE_BLOCKS)
+#define N_INODES (((N_INODES_PER_BLOCK * N_INODE_BLOCKS)>>3)<<3)
 
 // Block of inodes
 typedef struct inode_block_s
@@ -126,7 +126,7 @@ typedef struct master_block_s
   // 8 inodes per byte: One inode per bit: 1 = allocated, 0 = free
   // Inode 0 (zero) is byte 0, bit 7 
   //       1        is byte 0, bit 6
-  //       8        is byte 0, bit 7
+  //       8        is byte 1, bit 7
   unsigned char inode_allocated_flag[N_INODES >> 3];
 
   // Double-ended linked list representation for unallocated blocks
